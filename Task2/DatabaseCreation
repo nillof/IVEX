@@ -1,3 +1,7 @@
+CREATE DATABASE soundgood;
+
+\c soundgood;
+
 CREATE TABLE student (
     student_id SERIAL PRIMARY KEY,
     social_security_number VARCHAR(9) NOT NULL,
@@ -28,7 +32,7 @@ CREATE TABLE genre_taught (
 CREATE TABLE instructor_schedule (
     employee_id INT NOT NULL,
     date DATE NOT NULL,
-    time TIME(10),
+    time TIME(6),
     CONSTRAINT fk_instructor
         FOREIGN KEY (employee_id) REFERENCES instructor(employee_id),
     PRIMARY KEY(date, employee_id)
