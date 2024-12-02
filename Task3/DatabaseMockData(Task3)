@@ -138,7 +138,10 @@ INSERT INTO lesson (lesson_id, date, level, duration, instructor, employee_id) V
 (56, '2024-10-12', 'Advanced', '60 minutes', 'Jane Doe', 4),
 (57, '2024-10-12', 'Advanced', '60 minutes', 'Jane Doe', 4),
 (58, '2024-10-12', 'Advanced', '60 minutes', 'Jane Doe', 6),
-(59, '2024-10-12', 'Advanced', '60 minutes', 'Jane Doe', 1);
+(59, '2024-10-12', 'Advanced', '60 minutes', 'Jane Doe', 1),
+(70, '2025-01-03', 'Advanced', '60 minutes', 'Jane Doe', 1),
+(71, '2025-01-03', 'Advanced', '60 minutes', 'Jane Doe', 1),
+(72, '2025-01-02', 'Advanced', '60 minutes', 'Jane Doe', 1);
 
 INSERT INTO students_lesson (lesson_id, student_id) VALUES
 (1, 12),
@@ -241,7 +244,10 @@ INSERT INTO ensemble (lesson_id, date, level, duration, instructor, employee_id,
 (42, '2024-12-16', 'Intermediate', '45 minutes', 'Jane Doe', 2, 'Rock', 3, 6),
 (43, '2024-12-17', 'Advanced', '60 minutes', 'Jim Doe', 3, 'Classical', 2, 5),
 (44, '2024-12-16', 'Advanced', '60 minutes', 'Jim Doe', 3, 'Classical', 2, 5),
-(37, '2023-6-21', 'Advanced', '60 minutes', 'Jane Doe', 2, 'Classical', 2, 5);
+(37, '2023-6-21', 'Advanced', '60 minutes', 'Jane Doe', 2, 'Classical', 2, 5),
+(70, '2025-01-03', 'Beginner', '60 minutes', 'Jim Doe', 3, 'Jazz', 2, 6),
+(71, '2025-01-03', 'Beginner', '60 minutes', 'Jim Doe', 3, 'Classical', 2, 5),
+(72, '2025-01-02', 'Beginner', '60 minutes', 'Jim Doe', 3, 'Classical', 2, 5);
 
 INSERT INTO instrument_for_rent (instrument_type, quantity, instrument_brand, fee) VALUES
 ('Piano', 5, 'Yamaha', '$30/month'),
@@ -303,7 +309,10 @@ INSERT INTO lessons_performed (lesson_id, student_id, employee_id, date, level_o
 (56, 16, 4, '2024-12-06', 'Beginner', 'Individual'),
 (57, 10, 4, '2024-12-05', 'Beginner', 'Individual'),
 (58, 13, 6, '2024-12-07', 'Beginner', 'Group'),
-(59, 14, 2, '2024-12-04', 'Beginner', 'Individual');
+(59, 14, 2, '2024-12-04', 'Beginner', 'Individual'),
+(70, 10, 1, '2025-01-03', 'Beginner', 'Ensemble'),
+(71, 13, 1, '2025-01-03', 'Beginner', 'Ensemble'),
+(72, 14, 1, '2025-01-02', 'Beginner', 'Ensemble');
 
 INSERT INTO discount (student_id, number_of_siblings) VALUES
 (1, 2),
