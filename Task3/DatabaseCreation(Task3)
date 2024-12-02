@@ -1,0 +1,207 @@
+CREATE DATABASE soundgood;
+
+\c soundgood;
+
+CREATE TABLE student (
+    student_id SERIAL PRIMARY KEY,
+    social_security_number VARCHAR(9) NOT NULL,
+    number_of_rented_instruments INT
+);
+
+CREATE TABLE instructor (
+    employee_id SERIAL PRIMARY KEY,
+    social_security_number VARCHAR(9) NOT NULL
+);
+
+CREATE TABLE instruments_played (
+    employee_id INT NOT NULL,
+    instrument_type VARCHAR(500) NOT NULL,
+    CONSTRAINT fk_instructor
+        FOREIGN KEY(employee_id) REFERENCES instructor(employee_id),
+    PRIMARY KEY(employee_id, instrument_type)
+);
+
+CREATE TABLE genre_taught (
+    employee_id INT NOT NULL,
+    genre VARCHAR(500) NOT NULL,
+    CONSTRAINT fk_instructor
+        FOREIGN KEY (employee_id) REFERENCES instructor(employee_id),
+    PRIMARY KEY(genre, employee_id)
+);
+
+CREATE TABLE instructor_schedule (
+    employee_id INT NOT NULL,
+    date DATE NOT NULL,
+    time TIME(6),
+    CONSTRAINT fk_instructor
+        FOREIGN KEY (employee_id) REFERENCES instructor(employee_id),
+    PRIMARY KEY(date, employee_id)
+);
+
+CREATE TABLE contact_person (
+    contact_id SERIAL PRIMARY KEY,
+    contact_relationship VARCHAR(500)
+);
+
+CREATE TABLE students_contacts (
+    student_id INT,
+    contact_id INT,
+    CONSTRAINT fk_student
+        FOREIGN KEY(student_id) REFERENCES student(student_id),
+    CONSTRAINT fk_contact_person
+        FOREIGN KEY(contact_id) REFERENCES contact_person(contact_id),
+    PRIMARY KEY(student_id, contact_id)
+);
+
+
+CREATE TABLE personal_details (
+    person_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(500) NOT NULL,
+    last_name VARCHAR(500) NOT NULL,
+    street VARCHAR(500) NOT NULL,
+    zip VARCHAR(500) NOT NULL,
+    city VARCHAR(500) NOT NULL,
+    student_id INT,
+    employee_id INT,
+    contact_id INT,
+    CONSTRAINT fk_student
+        FOREIGN KEY(student_id) REFERENCES student(student_id),
+    CONSTRAINT fk_instructor
+        FOREIGN KEY(employee_id) REFERENCES instructor(employee_id),
+    CONSTRAINT fk_contact
+        FOREIGN KEY (contact_id) REFERENCES contact_person(contact_id)
+);
+
+CREATE TABLE email (
+    email_address VARCHAR(500) NOT NULL,
+    person_id INT NOT NULL,
+    CONSTRAINT fk_person_id
+        FOREIGN KEY (person_id) REFERENCES personal_details(person_id),
+    PRIMARY KEY(email_address, person_id)
+);
+
+CREATE TABLE phone (
+    phone_number VARCHAR(500) NOT NULL,
+    person_id INT NOT NULL,
+    CONSTRAINT fk_person_id
+        FOREIGN KEY (person_id) REFERENCES personal_details(person_id),
+    PRIMARY KEY(phone_number, person_id)
+);
+
+CREATE TABLE lesson (
+    lesson_id SERIAL PRIMARY KEY,
+    date DATE NOT NULL,
+    level VARCHAR(500) NOT NULL,
+    duration varchar(500),
+    instructor VARCHAR(500) NOT NULL,
+    employee_id INT NOT NULL,
+    CONSTRAINT fk_instructor
+        FOREIGN KEY(employee_id) REFERENCES instructor(employee_id)
+);
+
+CREATE TABLE students_lesson (
+    lesson_id INT,
+    student_id INT,
+    CONSTRAINT fk_student
+        FOREIGN KEY(student_id) REFERENCES student(student_id),
+    CONSTRAINT fk_lesson
+        FOREIGN KEY(lesson_id) REFERENCES lesson(lesson_id),
+    PRIMARY KEY(student_id, lesson_id)
+);
+
+CREATE TABLE individual_lesson (
+    lesson_id INT NOT NULL,
+    instrument_type VARCHAR(500),
+    CONSTRAINT fk_lesson
+        FOREIGN KEY(lesson_id) REFERENCES lesson(lesson_id)
+) INHERITS (lesson);
+
+CREATE TABLE group_lesson (
+    lesson_id INT NOT NULL,
+    instrument_type VARCHAR(500),
+    min_participants INT,
+    max_participants INT,
+    CONSTRAINT fk_lesson
+        FOREIGN KEY(lesson_id) REFERENCES lesson(lesson_id)
+) INHERITS (lesson);
+
+CREATE TABLE ensemble (
+    lesson_id INT NOT NULL,
+    genre VARCHAR(500),
+    min_participants INT,
+    max_participants INT,
+    CONSTRAINT fk_lesson
+        FOREIGN KEY(lesson_id) REFERENCES lesson(lesson_id)
+) INHERITS (lesson);
+
+CREATE TABLE instrument_for_rent (
+    instrument_id SERIAL PRIMARY KEY,
+    instrument_type VARCHAR(500) NOT NULL,
+    quantity INT,
+    instrument_brand VARCHAR(500),
+    fee VARCHAR(500)
+);
+
+CREATE TABLE instrument_rental (
+    instrument_id INT ,
+    date DATE NOT NULL,
+    student_id INT NOT NULL,
+    CONSTRAINT fk_instrument_for_rent
+        FOREIGN KEY(instrument_id) REFERENCES instrument_for_rent(instrument_id),
+    CONSTRAINT fk_student
+        FOREIGN KEY(student_id) REFERENCES student(student_id),
+    PRIMARY KEY(student_id, instrument_id)
+);
+
+CREATE TABLE price_list (
+    type_of_lesson VARCHAR(500),
+    level_of_lesson VARCHAR(500),
+    fee VARCHAR(500),
+    PRIMARY KEY(type_of_lesson, level_of_lesson)
+);
+
+CREATE TABLE lessons_performed (
+    lesson_id INT,
+    student_id INT,
+    employee_id INT,
+    type_of_lesson VARCHAR(500),
+    level_of_lesson VARCHAR(500),
+    date DATE NOT NULL,
+    CONSTRAINT fk_lesson
+        FOREIGN KEY(lesson_id) REFERENCES lesson(lesson_id),
+    CONSTRAINT fk_instructor
+        FOREIGN KEY(employee_id) REFERENCES instructor(employee_id),
+    CONSTRAINT fk_student
+        FOREIGN KEY(student_id) REFERENCES student(student_id),
+    CONSTRAINT fk_lesson_index
+        FOREIGN KEY(type_of_lesson, level_of_lesson) REFERENCES price_list(type_of_lesson, level_of_lesson),
+    PRIMARY KEY(lesson_id, employee_id, student_id)
+);
+
+
+CREATE TABLE discount (
+    student_id INT,
+    number_of_siblings INT,
+    CONSTRAINT fk_student
+        FOREIGN KEY(student_id) REFERENCES student(student_id),
+    PRIMARY KEY(student_id)
+);
+
+CREATE TABLE instrument_skill (
+    student_id INT,
+    instrument_type VARCHAR(500),
+    curent_skill VARCHAR(500) NOT NULL,
+    CONSTRAINT fk_student
+        FOREIGN KEY(student_id) REFERENCES student(student_id),
+    PRIMARY KEY(student_id, instrument_type)
+);
+
+CREATE TABLE sibling (
+    sibling_id INT,
+    student_id INT,
+    enrolled VARCHAR(500),
+    CONSTRAINT fk_student
+        FOREIGN KEY(student_id) REFERENCES student(student_id),
+    PRIMARY KEY(student_id, sibling_id)
+);
+
